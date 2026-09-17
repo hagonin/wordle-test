@@ -32,9 +32,8 @@ function resultsToCode(results: Result[]): number {
 export function score(answer: string, guess: string): Result[] {
   const code = scoreCode(answer, guess);
   const results: Result[] = [];
-  let remainder = code;
   for (let i = 0; i < 5; i++) {
-    const digit = Math.floor(remainder / DIGIT_WEIGHTS[i]) % 3;
+    const digit = Math.floor(code / DIGIT_WEIGHTS[i]) % 3;
     results.push(DIGIT_TO_RESULT[digit]);
   }
   return results;
@@ -46,6 +45,29 @@ const WORDS_SET = new Set(WORDS);
 function selectPool(candidates: readonly string[]): readonly string[] {
   const answerListSurvivors = candidates.filter((word) => WORDS_SET.has(word));
   return answerListSurvivors.length > 0 ? answerListSurvivors : candidates;
+}
+
+function pickNextGuess(pool: readonly string[]): string {
+  let best = pool[0];
+  let bestCount = -1;
+
+  for (const candidate of pool) {
+    const seen = new Uint8Array(243);
+    let distinctCount = 0;
+    for (const other of pool) {
+      const code = scoreCode(other, candidate);
+      if (seen[code] === 0) {
+        seen[code] = 1;
+        distinctCount++;
+      }
+    }
+    if (distinctCount > bestCount) {
+      bestCount = distinctCount;
+      best = candidate;
+    }
+  }
+
+  return best;
 }
 
 export async function solve(
@@ -72,7 +94,7 @@ export async function solve(
     }
 
     const pool = selectPool(candidates);
-    nextWord = pool[0];
+    nextWord = pickNextGuess(pool);
   }
 
   return { solved: false, reason: "out-of-guesses", guesses };
