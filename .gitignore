@@ -6,3 +6,4 @@ tsconfig.tsbuildinfo
 .DS_Store
 /plans
 CLAUDE.md
+.vercel
