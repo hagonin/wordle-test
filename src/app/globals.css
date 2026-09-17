@@ -1,3 +1,22 @@
+:root {
+  --bg-base: #ffffff;
+  --bg-subtle: #fafafa;
+  --fg-base: #09090b;
+  --fg-muted: #52525b;
+  --fg-subtle: #71717a;
+  --border: #e4e4e7;
+  --accent: #4f46e5;
+  --danger: #b91c1c;
+
+  --tile-correct: #538d4e;
+  --tile-present: #9a8420;
+  --tile-absent: #787c7e;
+  --tile-empty-border: #d4d4d8;
+
+  --grad-mint: linear-gradient(135deg, #ecfdf3 0%, #d1f4dd 100%);
+  --grad-peach: linear-gradient(135deg, #fff4ec 0%, #fee7d6 100%);
+}
+
 *,
 *::before,
 *::after {
@@ -6,4 +25,7 @@
 
 body {
   margin: 0;
+  background: var(--bg-base);
+  color: var(--fg-base);
+  font-family: var(--font-inter), sans-serif;
 }
