@@ -79,6 +79,17 @@ describe("bundle boundaries", () => {
     const source = readFileSync(file, "utf8");
     expect(hasValueImportOfSolverModules(source, file)).toBe(false);
   });
+
+  it("only the Votee adapter calls fetch on the server", () => {
+    const FETCH_CALL_PATTERN = /\bfetch\(/;
+    const files = collectSourceFiles("src").filter(
+      (file) => file !== join("src", "lib", "votee-api.ts"),
+    );
+    const offenders = files.filter((file) =>
+      FETCH_CALL_PATTERN.test(readFileSync(file, "utf8")),
+    );
+    expect(offenders).toEqual([]);
+  });
 });
 
 describe("importsAliasedPath", () => {
